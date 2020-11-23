@@ -111,3 +111,10 @@ fi
 
 rm -f {Config_heavy.pl,Config.pm}.{orig,bak}
 popd
+
+# Keep empty site/vendor directories, work around issue:
+#  https://github.com/conda/conda-build/issues/1014
+for path in {"${perl_lib}","${perl_archlib}"}{"${perl_site}","${perl_vendor}"} ; do
+  mkdir -p "${path}"
+  touch "${path}/.conda-build.keep"
+done
