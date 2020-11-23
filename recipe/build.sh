@@ -18,9 +18,41 @@ fi
 chmod -R o-w "${SRC_DIR}"
 
 declare -a _config_args
-_config_args+=(-Dprefix="${PREFIX}")
+
+# Installation layout:
+#  - prefix and vendor prefix are the same
+#  - all scripts go in PREFIX/bin
+#  - core/site/vendor package split adapted from Arch Linux
+#  - non-(minor)-version specific files go in PREFIX/lib/perl5
+#  - (minor) version specific files go in, e.g., PREFIX/lib/perl5/5.32
+
+perl_lib=".../../lib/perl5"
+perl_archlib="${perl_lib}/${PKG_VERSION%.*}"
+perl_core=/core_perl
+perl_site=/site_perl
+perl_vendor=/vendor_perl
+
+_config_args+=(
+  "-Dprefix=${PREFIX}"
+  "-Dvendorprefix=${PREFIX}"
+
+  "-Dscriptdir=${PREFIX}/bin"
+  "-Dsitescript=${PREFIX}/bin"
+  "-Dvendorscript=${PREFIX}/bin"
+
+  -Duserelocatableinc
+  -Dinc_version_list=none
+
+  "-Dprivlib=${perl_lib}${perl_core}"
+  "-Dsitelib=${perl_lib}${perl_site}"
+  "-Dvendorlib=${perl_lib}${perl_vendor}"
+
+  "-Darchlib=${perl_archlib}${perl_core}"
+  "-Dsitearch=${perl_archlib}${perl_site}"
+  "-Dvendorarch=${perl_archlib}${perl_vendor}"
+)
+
 _config_args+=(-Dusethreads)
-_config_args+=(-Duserelocatableinc)
 _config_args+=(-Dcccdlflags="-fPIC")
 _config_args+=(-Dldflags="${LDFLAGS} ${ARCHFLAGS}")
 # .. ran into too many problems with '.' not being on @INC:
@@ -60,20 +92,22 @@ chmod -R o-w "${SRC_DIR}"
 make install
 
 # Replace hard-coded BUILD_PREFIX by value from env as CC, CFLAGS etc need to be properly set to be usable by ExtUtils::MakeMaker module
-(cd $PREFIX/lib/5*/*-thread-*/ && patch -p1) < $RECIPE_DIR/dynamic_config.patch
-sed -i.bak "s|\\(='[^'\\@]*\\)@|\\1\\\\@|g" $PREFIX/lib/*/*/Config_heavy.pl
-sed -i.bak "s|${BUILD_PREFIX}|\$compilerroot|g" $PREFIX/lib/*/*/Config_heavy.pl
+pushd "${perl_archlib/...\/../${PREFIX}}${perl_core}"
+patch -p1 < $RECIPE_DIR/dynamic_config.patch
+sed -i.bak "s|\\(='[^'\\@]*\\)@|\\1\\\\@|g" Config_heavy.pl
+sed -i.bak "s|${BUILD_PREFIX}|\$compilerroot|g" Config_heavy.pl
 
-sed -i.bak "s|cc => '\(.*\)'|cc => \"\1\"|g" $PREFIX/lib/*/*/Config.pm
-sed -i.bak "s|libpth => '\(.*\)'|libpth => \"\1\"|g" $PREFIX/lib/*/*/Config.pm
-sed -i.bak "s|${BUILD_PREFIX}|\$compilerroot|g" $PREFIX/lib/*/*/Config.pm
+sed -i.bak "s|${BUILD_PREFIX}|\$compilerroot|g" Config.pm
+sed -i.bak "s|cc => '\(.*\)'|cc => \"\1\"|g" Config.pm
+sed -i.bak "s|libpth => '\(.*\)'|libpth => \"\1\"|g" Config.pm
 
 # 2 more seds for osx:
-sed -i.bak "s|\\\c|\\\\\\\c|g" $PREFIX/lib/*/*/Config_heavy.pl
-sed -i.bak "s|DPERL_SBRK_VIA_MALLOC \$ccflags|DPERL_SBRK_VIA_MALLOC \\\\\$ccflags|g" $PREFIX/lib/*/*/Config_heavy.pl
-
-rm $PREFIX/lib/*/*/Config_heavy.pl.bak $PREFIX/lib/*/*/Config.pm.bak
+sed -i.bak "s|\\\c|\\\\\\\c|g" Config_heavy.pl
+sed -i.bak "s|DPERL_SBRK_VIA_MALLOC \$ccflags|DPERL_SBRK_VIA_MALLOC \\\\\$ccflags|g" Config_heavy.pl
 
 if [[ "$target_platform" == "arm64" ]]; then
-  sed -i '' 's/-arch x86_64 -arch arm64//g' $PREFIX/lib/$PKG_VERSION/darwin-thread-multi-2level/Config_heavy.pl
+  sed -i.bak 's/-arch x86_64 -arch arm64//g' Config_heavy.pl
 fi
+
+rm -f {Config_heavy.pl,Config.pm}.{orig,bak}
+popd
