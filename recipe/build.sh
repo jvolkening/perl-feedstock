@@ -112,7 +112,7 @@ sed -i.bak "s|libpth => '\(.*\)'|libpth => \"\1\"|g" Config.pm
 sed -i.bak "s|\\\c|\\\\\\\c|g" Config_heavy.pl
 sed -i.bak "s|DPERL_SBRK_VIA_MALLOC \$ccflags|DPERL_SBRK_VIA_MALLOC \\\\\$ccflags|g" Config_heavy.pl
 
-if [[ "$target_platform" == "arm64" ]]; then
+if [[ "$target_platform" == "osx-arm64" ]]; then
   sed -i.bak 's/-arch x86_64 -arch arm64//g' Config_heavy.pl
 fi
 
