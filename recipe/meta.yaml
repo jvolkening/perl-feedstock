@@ -38,9 +38,9 @@ test:
       perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/site_perl"  # [unix]
       perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/vendor_perl"  # [unix]
       perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/core_perl"  # [unix]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ PKG_VERSION.split(".")[:2] | join(".") }}/site_perl"  # [unix]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ PKG_VERSION.split(".")[:2] | join(".") }}/vendor_perl"  # [unix]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ PKG_VERSION.split(".")[:2] | join(".") }}/core_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ unix_version.split(".")[:2] | join(".") }}/site_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ unix_version.split(".")[:2] | join(".") }}/vendor_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ unix_version.split(".")[:2] | join(".") }}/core_perl"  # [unix]
 
 about:
   home: http://www.perl.org/
