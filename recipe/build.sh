@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ "${build_platform}" == osx-64 && "${target_platform}" == osx-arm64 ]]; then
-  ARCHFLAGS="-arch x86_64 -arch arm64"
+  archflags="-arch x86_64 -arch arm64"
   export MACOSX_DEPLOYMENT_TARGET=10.9
 fi
 
@@ -9,9 +9,9 @@ if [[ "${target_platform}" == osx-* ]]; then
   if [[ "${target_platform}" == osx-64 ]]; then
     CFLAGS="${CFLAGS} -D_DARWIN_FEATURE_CLOCK_GETTIME=0"
   fi
-  CCFLAGS="${CFLAGS} -fno-common -DPERL_DARWIN -no-cpp-precomp -Werror=partial-availability -D_DARWIN_FEATURE_CLOCK_GETTIME=0 -fno-strict-aliasing -pipe -fstack-protector-strong -DPERL_USE_SAFE_PUTENV ${ARCHFLAGS} ${CPPFLAGS}"
+  ccflags="${CFLAGS} -fno-common -DPERL_DARWIN -no-cpp-precomp -Werror=partial-availability -D_DARWIN_FEATURE_CLOCK_GETTIME=0 -fno-strict-aliasing -pipe -fstack-protector-strong -DPERL_USE_SAFE_PUTENV ${archflags} ${CPPFLAGS}"
 elif [[ "${target_platform}" == linux-* ]]; then
-  CCFLAGS="${CFLAGS} -D_REENTRANT -D_GNU_SOURCE -fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2"
+  ccflags="${CFLAGS} -D_REENTRANT -D_GNU_SOURCE -fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2"
 fi
 
 # world-writable files are not allowed
@@ -54,12 +54,12 @@ _config_args+=(
 
 _config_args+=(-Dusethreads)
 _config_args+=(-Dcccdlflags="-fPIC")
-_config_args+=(-Dldflags="${LDFLAGS} ${ARCHFLAGS}")
+_config_args+=(-Dldflags="${LDFLAGS} ${archflags}")
 # .. ran into too many problems with '.' not being on @INC:
 _config_args+=(-Ddefault_inc_excludes_dot=n)
 
-if [[ -n "${CCFLAGS}" ]]; then
-  _config_args+=(-Dccflags="${CCFLAGS}")
+if [[ -n "${ccflags}" ]]; then
+  _config_args+=(-Dccflags="${ccflags}")
 fi
 if [[ -n "${GCC:-${CC}}" ]]; then
   _config_args+=("-Dcc=${GCC:-${CC}}")
