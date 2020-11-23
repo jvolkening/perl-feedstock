@@ -1,16 +1,16 @@
 #!/bin/bash
 
-if [[ "$build_platform" == "osx-64" && "$target_platform" == "osx-arm64" ]]; then
+if [[ "${build_platform}" == osx-64 && "${target_platform}" == osx-arm64 ]]; then
   ARCHFLAGS="-arch x86_64 -arch arm64"
   export MACOSX_DEPLOYMENT_TARGET=10.9
 fi
 
-if [[ "$target_platform" == osx-* ]]; then
-  if [[ "$target_platform" == osx-64 ]]; then
+if [[ "${target_platform}" == osx-* ]]; then
+  if [[ "${target_platform}" == osx-64 ]]; then
     CFLAGS="${CFLAGS} -D_DARWIN_FEATURE_CLOCK_GETTIME=0"
   fi
   CCFLAGS="${CFLAGS} -fno-common -DPERL_DARWIN -no-cpp-precomp -Werror=partial-availability -D_DARWIN_FEATURE_CLOCK_GETTIME=0 -fno-strict-aliasing -pipe -fstack-protector-strong -DPERL_USE_SAFE_PUTENV ${ARCHFLAGS} ${CPPFLAGS}"
-elif [[ "$target_platform" == linux-* ]]; then
+elif [[ "${target_platform}" == linux-* ]]; then
   CCFLAGS="${CFLAGS} -D_REENTRANT -D_GNU_SOURCE -fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2"
 fi
 
@@ -67,9 +67,9 @@ fi
 if [[ -n "${AR}" ]]; then
   _config_args+=("-Dar=${AR}")
 fi
-if [[ ${HOST} =~ .*linux.* ]]; then
+if [[ "${target_platform}" == linux-* ]]; then
   _config_args+=(-Dlddlflags="-shared ${LDFLAGS}")
-# elif [[ ${HOST} =~ .*darwin.* ]]; then
+# elif [[ "${target_platform}" == osx-* ]]; then
 #   _config_args+=(-Dlddlflags=" -bundle -undefined dynamic_lookup ${LDFLAGS}")
 fi
 # -Dsysroot prevents Configure rummaging around in /usr and
@@ -101,7 +101,7 @@ make install
 
 # Replace hard-coded BUILD_PREFIX by value from env as CC, CFLAGS etc need to be properly set to be usable by ExtUtils::MakeMaker module
 pushd "${perl_archlib/...\/../${PREFIX}}${perl_core}"
-patch -p1 < $RECIPE_DIR/dynamic_config.patch
+patch -p1 < "${RECIPE_DIR}/dynamic_config.patch"
 sed -i.bak "s|${BUILD_PREFIX}|\$compilerroot|g" Config_heavy.pl
 
 sed -i.bak "s|${BUILD_PREFIX}|\$compilerroot|g" Config.pm
@@ -112,7 +112,7 @@ sed -i.bak "s|libpth => '\(.*\)'|libpth => \"\1\"|g" Config.pm
 sed -i.bak "s|\\\c|\\\\\\\c|g" Config_heavy.pl
 sed -i.bak "s|DPERL_SBRK_VIA_MALLOC \$ccflags|DPERL_SBRK_VIA_MALLOC \\\\\$ccflags|g" Config_heavy.pl
 
-if [[ "$target_platform" == "osx-arm64" ]]; then
+if [[ "${target_platform}" == osx-arm64 ]]; then
   sed -i.bak 's/-arch x86_64 -arch arm64//g' Config_heavy.pl
 fi
 
