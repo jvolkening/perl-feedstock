@@ -78,6 +78,14 @@ fi
 # all Configure/run checks which we also do not want.
 _config_args+=("-Dsysroot=${CONDA_BUILD_SYSROOT}")
 
+_config_args+=(
+  -Dmyhostname=conda
+  -Dmydomain=.conda
+  -Dperladmin=conda
+  -Dcf_by=conda
+  -Dcf_email=conda
+)
+
 ./Configure -de "${_config_args[@]}"
 make
 
@@ -94,7 +102,6 @@ make install
 # Replace hard-coded BUILD_PREFIX by value from env as CC, CFLAGS etc need to be properly set to be usable by ExtUtils::MakeMaker module
 pushd "${perl_archlib/...\/../${PREFIX}}${perl_core}"
 patch -p1 < $RECIPE_DIR/dynamic_config.patch
-sed -i.bak "s|\\(='[^'\\@]*\\)@|\\1\\\\@|g" Config_heavy.pl
 sed -i.bak "s|${BUILD_PREFIX}|\$compilerroot|g" Config_heavy.pl
 
 sed -i.bak "s|${BUILD_PREFIX}|\$compilerroot|g" Config.pm
