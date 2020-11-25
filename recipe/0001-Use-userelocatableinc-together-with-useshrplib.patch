@@ -1,7 +1,7 @@
-diff --git a/Configure b/Configure
+diff --git Configure Configure
 index cef8c3c..9e96f1d 100755
---- a/Configure
-+++ b/Configure
+--- Configure
++++ Configure
 @@ -8712,13 +8712,6 @@ esac
  
  case "$useshrplib" in
