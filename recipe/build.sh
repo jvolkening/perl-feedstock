@@ -126,3 +126,7 @@ for path in {"${perl_lib}","${perl_archlib}"}{"${perl_site}","${perl_vendor}"} ;
   mkdir -p "${path}"
   touch "${path}/.conda-build.keep"
 done
+
+# Add empty perllocal.pod to avoid Perl packages clobbering on that file.
+# (If all recipes used ExtUtils::MakeMaker's NO_PERLLOCAL=1 this wouldn't be needed).
+touch "${perl_archlib/...\/../${PREFIX}}${perl_core}"/perllocal.pod
