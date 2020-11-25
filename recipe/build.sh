@@ -41,6 +41,7 @@ _config_args+=(
   "-Dvendorscript=${PREFIX}/bin"
 
   -Duserelocatableinc
+  -Duseshrplib
   -Dinc_version_list=none
 
   "-Dprivlib=${perl_lib}${perl_core}"
