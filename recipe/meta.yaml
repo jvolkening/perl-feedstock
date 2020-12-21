@@ -1,5 +1,6 @@
 {% set unix_version = "5.32.0" %}
 {% set win_version = unix_version + ".1" %}
+{% set major_minor_version = unix_version.split(".")[:2] | join(".") %}
 
 package:
   name: perl
@@ -19,8 +20,14 @@ source:
 
 build:
   number: 1
-  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5  # [unix]
-  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}        # [not unix]
+  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_strawberry  # [win]
+  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5       # [not win]
+  run_exports:
+    weak:
+      - perl {{ major_minor_version }}.* *_strawberry  # [win]
+      - perl {{ major_minor_version }}.* *_perl5       # [not win]
+    noarch:                                            # [not win]
+      - perl                                           # [not win]
 
 requirements:
   build:
@@ -40,9 +47,9 @@ test:
       perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/site_perl"  # [unix]
       perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/vendor_perl"  # [unix]
       perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/core_perl"  # [unix]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ unix_version.split(".")[:2] | join(".") }}/site_perl"  # [unix]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ unix_version.split(".")[:2] | join(".") }}/vendor_perl"  # [unix]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ unix_version.split(".")[:2] | join(".") }}/core_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/site_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/vendor_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/core_perl"  # [unix]
 
 about:
   home: http://www.perl.org/
