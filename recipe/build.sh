@@ -53,6 +53,8 @@ _config_args+=(
   "-Dvendorarch=${perl_archlib}${perl_vendor}"
 )
 
+_config_args+=(-Dinstallusrbinperl=n)
+
 _config_args+=(-Dusethreads)
 _config_args+=(-Dcccdlflags="-fPIC")
 _config_args+=(-Dldflags="${LDFLAGS} ${archflags}")
