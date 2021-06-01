@@ -14,8 +14,8 @@ source:
       - 0001-Use-userelocatableinc-together-with-useshrplib.patch                                                   # [unix]
   - url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win64]
     url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-32bit-portable.zip  # [win32]
-    sha1: 075b5f77eb862a1ca6d83065662b36749bc39788                                                                  # [win64]
-    sha1: 2b37527d2038731ab9d32ab24a8bb11c116dd60a                                                                  # [win32]
+    sha1: fac226b31461f2392702822052a3a5628917f857                                                                  # [win64]
+    sha1: 28bca91cadd6651c2b2463db8587c170bf17f2fa                                                                  # [win32]
     # sha1 hashes published at: http://strawberryperl.com/releases.html
 
 build:
