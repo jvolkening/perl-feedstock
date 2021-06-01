@@ -89,6 +89,12 @@ _config_args+=(
   -Dcf_email=conda
 )
 
+_config_args+=(
+  "-Dsysman=${PREFIX}/man/man1"
+  "-Dman1dir=.../../man/man1"
+  "-Dman3dir=.../../man/man3"
+)
+
 ./Configure -de "${_config_args[@]}"
 make
 
