@@ -1,4 +1,4 @@
-{% set unix_version = "5.32.0" %}
+{% set unix_version = "5.32.1" %}
 {% set win_version = unix_version + ".1" %}
 {% set major_minor_version = unix_version.split(".")[:2] | join(".") %}
 
@@ -8,18 +8,18 @@ package:
   version: {{ win_version }}   # [win]
 
 source:
-  - url: http://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.gz                                                 # [unix]
-    sha256: efeb1ce1f10824190ad1cadbcccf6fdb8a5d37007d0100d2d9ae5f2b5900c0b4                                        # [unix]
+  - url: http://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz                                                 # [unix]
+    sha256: 57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309                                        # [unix]
     patches:                                                                                                        # [unix]
       - 0001-Use-userelocatableinc-together-with-useshrplib.patch                                                   # [unix]
   - url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win64]
     url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-32bit-portable.zip  # [win32]
-    sha1: 25cc36aa98e5ec6a5d507a2a7a6e39eb655795f3                                                                  # [win64]
-    sha1: 61b204137c6c4277b5155eb5cc0514e9e4674625                                                                  # [win32]
+    sha1: 075b5f77eb862a1ca6d83065662b36749bc39788                                                                  # [win64]
+    sha1: 2b37527d2038731ab9d32ab24a8bb11c116dd60a                                                                  # [win32]
     # sha1 hashes published at: http://strawberryperl.com/releases.html
 
 build:
-  number: 1
+  number: 0
   string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_strawberry  # [win]
   string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5       # [not win]
   run_exports:
