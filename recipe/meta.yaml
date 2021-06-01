@@ -24,11 +24,11 @@ build:
   string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5       # [not win]
   run_exports:
     weak:
-      - perl {{ major_version }}.{{ minor_version }}.* *_strawberry  # [win]
-      - perl {{ major_version }}.{{ minor_version }}.* *_perl5       # [not win]
+      - {{ pin_subpackage("perl", max_pin="x.x") }} *_strawberry  # [win]
+      - {{ pin_subpackage("perl", max_pin="x.x") }} *_perl5       # [not win]
     noarch:
-      - perl {{ major_version }}.* *_strawberry  # [win]
-      - perl {{ major_version }}.* *_perl5       # [not win]
+      - {{ pin_subpackage("perl", max_pin="x") }} *_strawberry  # [win]
+      - {{ pin_subpackage("perl", max_pin="x") }} *_perl5       # [not win]
 
 requirements:
   build:
