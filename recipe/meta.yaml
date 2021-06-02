@@ -54,7 +54,7 @@ test:
 
 about:
   home: http://www.perl.org/
-  license: Artistic-1.0-Perl
+  license: GPL-1.0-or-later OR Artistic-1.0-Perl
   license_file:
     - Artistic  # [unix]
     - Copying   # [unix]
