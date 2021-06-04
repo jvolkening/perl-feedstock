@@ -1,5 +1,6 @@
-{% set unix_version = "5.32.0" %}
+{% set unix_version = "5.32.1" %}
 {% set win_version = unix_version + ".1" %}
+{% set major_minor_version = unix_version.split(".")[:2] | join(".") %}
 
 package:
   name: perl
@@ -7,16 +8,27 @@ package:
   version: {{ win_version }}   # [win]
 
 source:
-  url: http://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.gz                                                 # [unix]
-  url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win64]
-  url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-32bit-portable.zip  # [win32]
-  sha256: efeb1ce1f10824190ad1cadbcccf6fdb8a5d37007d0100d2d9ae5f2b5900c0b4                                        # [unix]
-  # sha1 hashes published at: http://strawberryperl.com/releases.html
-  sha1: 25cc36aa98e5ec6a5d507a2a7a6e39eb655795f3                                                                  # [win64]
-  sha1: 61b204137c6c4277b5155eb5cc0514e9e4674625                                                                  # [win32]
+  - url: http://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz                                                 # [unix]
+    sha256: 57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309                                        # [unix]
+    patches:                                                                                                        # [unix]
+      - 0001-Use-userelocatableinc-together-with-useshrplib.patch                                                   # [unix]
+  - url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win64]
+    url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-32bit-portable.zip  # [win32]
+    sha1: fac226b31461f2392702822052a3a5628917f857                                                                  # [win64]
+    sha1: 28bca91cadd6651c2b2463db8587c170bf17f2fa                                                                  # [win32]
+    # sha1 hashes published at: http://strawberryperl.com/releases.html
 
 build:
   number: 0
+  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_strawberry  # [win]
+  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5       # [not win]
+  run_exports:
+    weak:
+      - {{ pin_subpackage("perl", max_pin="x.x") }} *_strawberry  # [win]
+      - {{ pin_subpackage("perl", max_pin="x.x") }} *_perl5       # [not win]
+    noarch:
+      - {{ pin_subpackage("perl", max_pin="x") }} *_strawberry  # [win]
+      - {{ pin_subpackage("perl", max_pin="x") }} *_perl5       # [not win]
 
 requirements:
   build:
@@ -29,10 +41,20 @@ test:
   #   - automake
   commands:
     - perl --help
+    - |  # [unix]
+      perl -V:cf_by | grep -qF "'conda'"  # [unix]
+      perl -V:cf_email | grep -qF "'conda'"  # [unix]
+      perl -V:perladmin | grep -qF "'conda'"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/site_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/vendor_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/core_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/site_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/vendor_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/core_perl"  # [unix]
 
 about:
   home: http://www.perl.org/
-  license: Artistic-1.0-Perl
+  license: GPL-1.0-or-later OR Artistic-1.0-Perl
   license_file:
     - Artistic  # [unix]
     - Copying   # [unix]
@@ -53,3 +75,4 @@ extra:
     - msarahan
     - mingwandroid
     - isuruf
+    - mbargull
