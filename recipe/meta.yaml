@@ -19,7 +19,7 @@ source:
     # sha1 hashes published at: http://strawberryperl.com/releases.html
 
 build:
-  number: 0
+  number: 1
   string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_strawberry  # [win]
   string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5       # [not win]
   run_exports:
@@ -32,8 +32,10 @@ build:
 
 requirements:
   build:
-    - {{ compiler('c') }}   # [unix]
-    - make                  # [unix]
+    - {{ compiler('c') }}  # [unix]
+    - make                 # [unix]
+    - posix                # [win]
+  host:
 
 test:
   # downstreams:
@@ -51,6 +53,18 @@ test:
       perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/site_perl"  # [unix]
       perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/vendor_perl"  # [unix]
       perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/core_perl"  # [unix]
+    # conda replaces back- by forward slashes during prefix placeholder replacement on installs:
+    #   This means our Config.pm and Config_heavy.pl etc. carry mixed back-/forward slashes
+    #   which Perl seems to handle well, though.
+    #   refs:
+    #     - https://github.com/conda/conda/blob/4.10.3/conda/core/portability.py#L37-L40
+    #     - https://github.com/conda/conda/pull/2630#discussion_r66468372
+    - perl -V:privlib | findstr "/C:%PREFIX:\=/%\Library\lib"  # [win]
+    - perl -V:archlib | findstr "/C:%PREFIX:\=/%\Library\lib"  # [win]
+    - perl -V:sitelib | findstr "/C:%PREFIX:\=/%\Library\site\lib"  # [win]
+    - perl -V:sitearch | findstr "/C:%PREFIX:\=/%\Library\site\lib"  # [win]
+    - perl -V:vendorlib | findstr "/C:%PREFIX:\=/%\Library\vendor\lib"  # [win]
+    - perl -V:vendorarch | findstr "/C:%PREFIX:\=/%\Library\vendor\lib"  # [win]
 
 about:
   home: http://www.perl.org/
