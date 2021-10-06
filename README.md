@@ -3,7 +3,7 @@ About perl
 
 Home: http://www.perl.org/
 
-Package license: Artistic-1.0-Perl
+Package license: GPL-1.0-or-later OR Artistic-1.0-Perl
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/perl-feedstock/blob/master/LICENSE.txt)
 
