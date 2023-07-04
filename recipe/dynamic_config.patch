@@ -1,6 +1,6 @@
 --- ./Config.pm	2019-04-12 12:06:41.126189114 +0200
 +++ ./Config.pm	2019-04-12 12:08:19.216265962 +0200
-@@ -107,6 +107,22 @@
+@@ -107,6 +107,23 @@
      die "&Config::AUTOLOAD failed on $Config::AUTOLOAD";
  }
  
@@ -26,7 +26,7 @@
      archlibexp => relocate_inc('.../../lib/5.26.3/x86_64-linux-thread-multi'),
 --- ./Config_heavy.pl	2019-04-12 12:09:22.904665516 +0200
 +++ ./Config_heavy.pl	2019-04-12 12:10:10.280218802 +0200
-@@ -171,8 +171,24 @@
+@@ -171,8 +171,25 @@
      $summary_expanded;
  }
  
