@@ -125,6 +125,12 @@ if [[ "${target_platform}" == osx-arm64 ]]; then
   sed -i.bak 's/-arch x86_64 -arch arm64//g' Config_heavy.pl
 fi
 
+if [[ "${target_platform}" == osx-* ]]; then
+  sed -i.bak "s|--sysroot=$SDKROOT||g" Config_heavy.pl
+  sed -i.bak "s|$SDKROOT|\$sdkroot|g" Config_heavy.pl
+  sed -i.bak "s|$SDKROOT|\$sdkroot|g" Config.pm
+fi
+
 rm -f {Config_heavy.pl,Config.pm}.{orig,bak}
 popd
 
