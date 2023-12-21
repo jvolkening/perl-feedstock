@@ -72,8 +72,31 @@ if [[ -n "${AR}" ]]; then
 fi
 if [[ "${target_platform}" == linux-* ]]; then
   _config_args+=(-Dlddlflags="-shared ${LDFLAGS}")
-# elif [[ "${target_platform}" == osx-* ]]; then
-#   _config_args+=(-Dlddlflags=" -bundle -undefined dynamic_lookup ${LDFLAGS}")
+elif [[ "${target_platform}" == osx-* ]]; then
+  # _config_args+=(-Dlddlflags=" -bundle -undefined dynamic_lookup ${LDFLAGS}")
+  lddlflags="$(
+    set -- ${LDFLAGS}
+    for ldflag; do
+      set -- "${ldflag}"
+      case ${1} in
+        # hoist linker options, e.g., "-Wl,-rpath,/some/path" => "-rpath /some/path"
+        -Wl,* )
+          IFS=,
+          set -- ${ldflag}
+          shift
+        ;;
+      esac
+      for arg; do
+        case ${arg} in
+          -mmacosx-version-min=* | -fstack-protector-strong )
+            shift
+            ;;
+        esac
+      done
+      printf '%s ' "${@}"
+    done
+  )"
+  _config_args+=(-Dlddlflags="${lddlflags}")
 fi
 # -Dsysroot prevents Configure rummaging around in /usr and
 # linking to system libraries (like GDBM, which is GPL). An
@@ -128,10 +151,6 @@ fi
 if [[ "${target_platform}" == osx-* ]]; then
   sed -i.bak "s|--sysroot=$SDKROOT||g" Config_heavy.pl
   sed -i.bak "s|$SDKROOT|\$sdkroot|g" Config_heavy.pl
-  sed -i.bak "/^lddlflags/ s|-Wl,-rpath,|-rpath |g" Config_heavy.pl
-  sed -i.bak "/^lddlflags/ s|-Wl,||g" Config_heavy.pl
-  sed -i.bak "/^lddlflags/ s|-mmacosx-version-min=[0-9\.]*||g" Config_heavy.pl
-  sed -i.bak "/^lddlflags/ s|-fstack-protector-strong||g" Config_heavy.pl
   sed -i.bak "s|$SDKROOT|\$sdkroot|g" Config.pm
 fi
 
