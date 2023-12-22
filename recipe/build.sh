@@ -72,31 +72,8 @@ if [[ -n "${AR}" ]]; then
 fi
 if [[ "${target_platform}" == linux-* ]]; then
   _config_args+=(-Dlddlflags="-shared ${LDFLAGS}")
-elif [[ "${target_platform}" == osx-* ]]; then
-  # _config_args+=(-Dlddlflags=" -bundle -undefined dynamic_lookup ${LDFLAGS}")
-  lddlflags="$(
-    set -- ${LDFLAGS}
-    for ldflag; do
-      set -- "${ldflag}"
-      case ${1} in
-        # hoist linker options, e.g., "-Wl,-rpath,/some/path" => "-rpath /some/path"
-        ( -Wl,* )
-          IFS=,
-          set -- ${ldflag}
-          shift
-          ;;
-      esac
-      for arg; do
-        case ${arg} in
-          ( -mmacosx-version-min=* | -fstack-protector-strong )
-            shift
-            ;;
-        esac
-      done
-      printf '%s ' "${@}"
-    done
-  )"
-  _config_args+=(-Dlddlflags="${lddlflags}")
+# elif [[ "${target_platform}" == osx-* ]]; then
+#   _config_args+=(-Dlddlflags=" -bundle -undefined dynamic_lookup ${LDFLAGS}")
 fi
 # -Dsysroot prevents Configure rummaging around in /usr and
 # linking to system libraries (like GDBM, which is GPL). An

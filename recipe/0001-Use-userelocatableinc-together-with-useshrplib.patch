@@ -1,7 +1,23 @@
-diff --git Configure Configure
-index cef8c3c..9e96f1d 100755
---- Configure
-+++ Configure
+From a8d8528d5411ef6440d87a8d5ffe34f725c7c1d5 Mon Sep 17 00:00:00 2001
+From: Marcel Bargull <marcel.bargull@udo.edu>
+Date: Wed, 25 Nov 2020 08:01:19 +0100
+Subject: [PATCH 1/2] Use userelocatableinc together with useshrplib
+
+So we can build a relocatable shared library libperl.so.
+
+Since conda-build makes our rpaths relative with
+$ORIGIN/<relative-path>, the "hard-coded rpath ... cannot be relocated"
+doesn't really apply for us.
+
+Signed-off-by: Marcel Bargull <marcel.bargull@udo.edu>
+---
+ Configure | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/Configure b/Configure
+index fbc225822a..60d2068b9e 100755
+--- a/Configure
++++ b/Configure
 @@ -8712,13 +8712,6 @@ esac
  
  case "$useshrplib" in
