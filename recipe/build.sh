@@ -80,15 +80,15 @@ elif [[ "${target_platform}" == osx-* ]]; then
       set -- "${ldflag}"
       case ${1} in
         # hoist linker options, e.g., "-Wl,-rpath,/some/path" => "-rpath /some/path"
-        -Wl,* )
+        ( -Wl,* )
           IFS=,
           set -- ${ldflag}
           shift
-        ;;
+          ;;
       esac
       for arg; do
         case ${arg} in
-          -mmacosx-version-min=* | -fstack-protector-strong )
+          ( -mmacosx-version-min=* | -fstack-protector-strong )
             shift
             ;;
         esac
