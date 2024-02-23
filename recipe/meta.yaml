@@ -31,11 +31,9 @@ requirements:
     - make                 # [unix]
     - m2w64-gcc            # [win]
     - m2w64-make           # [win]
-    - m2w64-crt-git        # [win]
     - m2-patch             # [win] 
     - m2-sed               # [win]
   host:
-    - m2w64-crt-git        # [win]
     - libxcrypt            # [linux]
 
 test:
@@ -60,12 +58,13 @@ test:
     #   refs:
     #     - https://github.com/conda/conda/blob/4.10.3/conda/core/portability.py#L37-L40
     #     - https://github.com/conda/conda/pull/2630#discussion_r66468372
-    - perl -e "print \"$_\n\" for @INC" | findstr "%PREFIX:\=/%/lib/perl5/site_perl"  # [win]
-    - perl -e "print \"$_\n\" for @INC" | findstr "%PREFIX:\=/%/lib/perl5/vendor_perl"  # [win]
-    - perl -e "print \"$_\n\" for @INC" | findstr "%PREFIX:\=/%/lib/perl5/core_perl"  # [win]
-    - perl -e "print \"$_\n\" for @INC" | findstr "%PREFIX:\=/%/lib/perl5/{{ major_minor_version }}/site_perl"  # [win]
-    - perl -e "print \"$_\n\" for @INC" | findstr "%PREFIX:\=/%/lib/perl5/{{ major_minor_version }}/vendor_perl"  # [win]
-    - perl -e "print \"$_\n\" for @INC" | findstr "%PREFIX:\=/%/lib/perl5/{{ major_minor_version }}/core_perl"  # [win]
+    - perl -V  # [win]
+    - perl -e "print \"$_\n\" for @INC" | findstr /E "lib/perl5/site_perl"  # [win]
+    - perl -e "print \"$_\n\" for @INC" | findstr /E "lib/perl5/vendor_perl"  # [win]
+    - perl -e "print \"$_\n\" for @INC" | findstr /E "lib/perl5/core_perl"  # [win]
+    - perl -e "print \"$_\n\" for @INC" | findstr /E "lib/perl5/{{ major_minor_version }}/site_perl"  # [win]
+    - perl -e "print \"$_\n\" for @INC" | findstr /E "lib/perl5/{{ major_minor_version }}/vendor_perl"  # [win]
+    - perl -e "print \"$_\n\" for @INC" | findstr /E "lib/perl5/{{ major_minor_version }}/core_perl"  # [win]
 
 about:
   home: http://www.perl.org/
@@ -80,7 +79,7 @@ about:
     mainframes and is suitable for both rapid prototyping and large scale
     development projects.
   doc_url: https://www.perl.org/docs.html
-  dev_url: https://perl5.git.perl.org/perl.git
+  dev_url: https://github.com/perl/perl5
 
 extra:
   recipe-maintainers:
