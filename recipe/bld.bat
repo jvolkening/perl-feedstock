@@ -12,15 +12,14 @@ set PERL_LIB=%PREFIX%\lib\perl5
 set ARCH_LIB=%PERL_LIB%\%MAJOR_MINOR%
 
 REM specifying PLMAKE below doesn't seem to be sufficient -- gmake still called in places
-copy %BUILD_PREFIX%\Library\mingw-w64\bin\mingw32-make.exe ^
- %BUILD_PREFIX%\Library\mingw-w64\bin\gmake.exe
+copy %BUILD_PREFIX%\Library\bin\make.exe ^
+ %BUILD_PREFIX%\Library\bin\gmake.exe
 
 if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
 cd win32
 
-mingw32-make -j%CPU_COUNT% ^
- PLMAKE=mingw32-make ^
+make -j%CPU_COUNT% ^
  INST_TOP=%PREFIX% ^
  CCHOME=%BUILD_PREFIX%\Library\mingw-w64 ^
  USE_64_BIT_INT=define ^
@@ -28,8 +27,7 @@ mingw32-make -j%CPU_COUNT% ^
 
 if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
-mingw32-make -j%CPU_COUNT% ^
- PLMAKE=mingw32-make ^
+make -j%CPU_COUNT% ^
  INST_TOP=%PREFIX% ^
  CCHOME=%BUILD_PREFIX%\Library\mingw-w64 ^
  PKG_VERS=%MAJOR_MINOR% ^
@@ -69,8 +67,7 @@ if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 REM Currently this needs to be done *after* install because the
 REM linker paths are set to the installed locations. Possibly there
 REM is a better approach for this.
-mingw32-make ^
- PLMAKE=mingw32-make ^
+make ^
  INST_TOP=%PREFIX% ^
  CCHOME=%BUILD_PREFIX%\Library\mingw-w64 ^
  PKG_VERS=%MAJOR_MINOR% ^
