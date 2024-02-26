@@ -17,7 +17,7 @@ source:
       - 0006-allow-t-TTY-to-fail-on-Windows.patch  # [win]
 
 build:
-  skip: True  # [not win]
+  skip: True  # [osx]
   number: 8
   run_exports:
     weak:
