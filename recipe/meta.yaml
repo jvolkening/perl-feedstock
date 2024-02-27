@@ -13,7 +13,7 @@ source:
       - 0002-Disable-direct-invocation-of-linker-if-LD-is-set.patch
       - 0003-update-setting-for-conda-directory-structure.patch  # [win]
       - 0004-skip-failing-Net-Ping-test-on-win.patch  # [win]
-      - 0005-skip-perlbug-test-that-fails-on-multiple-platforms.patch  # [win]
+      - 0005-skip-perlbug-test-that-fails-on-multiple-platforms.patch
       - 0006-allow-t-TTY-to-fail-on-Windows.patch  # [win]
 
 build:
