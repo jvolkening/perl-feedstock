@@ -29,6 +29,7 @@ requirements:
   build:
     - {{ compiler('c') }}  # [unix]
     - m2w64-gcc            # [win]
+    - {{ stdlib("c") }}
     - make
     - m2-patch             # [win] 
     - m2-sed               # [win]
