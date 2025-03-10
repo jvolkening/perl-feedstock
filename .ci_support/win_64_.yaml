@@ -1,6 +1,10 @@
+c_stdlib:
+- vs
 channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge main
+perl:
+- 5.32.1
 target_platform:
 - win-64
