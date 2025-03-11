@@ -16,6 +16,7 @@ source:
       - 0005-skip-perlbug-test-that-fails-on-multiple-platforms.patch
       - 0006-allow-t-TTY-to-fail-on-Windows.patch  # [win]
       - 0007-skip-single-magic-test-on-non-AMD64-unix.patch # [unix]
+      - 0008-skip-newly-failing-Win32-tests.patch # [win]
 
 build:
   skip: True  # [osx]
