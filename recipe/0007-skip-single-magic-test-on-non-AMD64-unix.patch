@@ -1,0 +1,35 @@
+From f47207f23ae793b0de297fe63317ac66951d60b3 Mon Sep 17 00:00:00 2001
+From: jvolkening <jdvolkening@gmail.com>
+Date: Mon, 10 Mar 2025 23:50:40 -0500
+Subject: [PATCH] skip single magic test on non-AMD64 unix
+
+---
+ t/op/magic.t | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/t/op/magic.t b/t/op/magic.t
+index e0dfcf9..7b4bb72 100644
+--- a/t/op/magic.t
++++ b/t/op/magic.t
+@@ -55,6 +55,7 @@ $Is_VMS      = $^O eq 'VMS';
+ $Is_Dos      = $^O eq 'dos';
+ $Is_os2      = $^O eq 'os2';
+ $Is_Cygwin   = $^O eq 'cygwin';
++$Is_AMD64    = $Config{archname} =~ /^x86_64/;
+ 
+ $PERL =
+    ($Is_NetWare ? 'perl'   :
+@@ -797,8 +798,8 @@ SKIP: {
+ 	env_is(__NoNeLoCaL => '');
+ 
+     SKIP: {
+-	    skip("\$0 check only on Linux and FreeBSD", 2)
+-		unless $^O =~ /^(linux|android|freebsd)$/
++	    skip("\$0 check only on Linux and FreeBSD (on AMD64)", 2)
++		unless ($^O =~ /^(linux|android|freebsd)$/ && $Is_AMD64)
+ 		    && open CMDLINE, "/proc/$$/cmdline";
+ 
+ 	    chomp(my $line = scalar <CMDLINE>);
+-- 
+2.39.5
+
