@@ -15,8 +15,8 @@ source:
       - 0004-skip-failing-Net-Ping-test-on-win.patch  # [win]
       - 0005-skip-perlbug-test-that-fails-on-multiple-platforms.patch
       - 0006-allow-t-TTY-to-fail-on-Windows.patch  # [win]
-      - 0007-skip-single-magic-test-on-non-AMD64-unix.patch # [unix]
-      - 0008-skip-newly-failing-Win32-tests.patch # [win]
+      - 0007-skip-several-tests-on-non-AMD64-unix.patch  # [unix]
+      - 0008-skip-newly-failing-Win32-tests.patch  # [win]
 
 build:
   skip: True  # [osx]
@@ -30,13 +30,15 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}  # [unix]
-    - m2w64-gcc            # [win]
-    - {{ stdlib("c") }}
+    - {{ stdlib("c") }}  # [unix]
+    - {{ compiler("m2w64_c") }}  # [win]
+    - {{ stdlib("m2w64_c") }}  # [win]
+    - m2w64-gcc  # [win]
+    - m2-patch  # [win] 
+    - m2-sed  # [win]
     - make
-    - m2-patch             # [win] 
-    - m2-sed               # [win]
   host:
-    - libxcrypt            # [linux]
+    - libxcrypt  # [linux]
 
 test:
   # downstreams:
