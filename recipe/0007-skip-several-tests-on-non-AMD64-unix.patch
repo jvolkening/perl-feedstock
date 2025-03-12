@@ -1,6 +1,6 @@
-From bf9816b0a57a732217c0b239f688f6a6c0457828 Mon Sep 17 00:00:00 2001
+From 5a8fbc39cbe2f72a0ff41f0d0ed77b16dab410bd Mon Sep 17 00:00:00 2001
 From: jvolkening <jdvolkening@gmail.com>
-Date: Tue, 11 Mar 2025 20:28:48 -0500
+Date: Tue, 11 Mar 2025 21:57:05 -0500
 Subject: [PATCH] skip several tests on non-AMD64 unix
 
 ---
@@ -9,7 +9,7 @@ Subject: [PATCH] skip several tests on non-AMD64 unix
  2 files changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/dist/threads/t/join.t b/dist/threads/t/join.t
-index 2272e07..7d4dbf1 100644
+index 2272e07..0d9ccdc 100644
 --- a/dist/threads/t/join.t
 +++ b/dist/threads/t/join.t
 @@ -9,10 +9,13 @@ BEGIN {
@@ -21,7 +21,7 @@ index 2272e07..7d4dbf1 100644
  
  use threads;
  
-+$Is_AMD64 = $Config{archname} =~ /^x86_64/;
++my $Is_AMD64 = $Config{archname} =~ /^x86_64/;
 +
  BEGIN {
      if (! eval 'use threads::shared; 1') {
