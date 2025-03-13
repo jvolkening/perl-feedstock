@@ -19,7 +19,7 @@ source:
       - 0008-skip-newly-failing-Win32-tests.patch  # [win]
 
 build:
-  skip: True  # [osx]
+  skip: True  # [not win]
   number: 8
   run_exports:
     weak:
@@ -29,11 +29,8 @@ build:
 
 requirements:
   build:
-    - {{ compiler('c') }}  # [unix]
-    - {{ stdlib("c") }}  # [unix]
-    - {{ compiler("m2w64_c") }}  # [win]
-    - {{ stdlib("m2w64_c") }}  # [win]
-    - m2w64-gcc  # [win]
+    - {{ compiler('c') }}
+    - {{ stdlib("c") }}
     - m2-patch  # [win] 
     - m2-sed  # [win]
     - make

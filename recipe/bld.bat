@@ -11,27 +11,25 @@ for %%f in (%PKG_VERSION%) do set MAJOR_MINOR=%%~nf
 set PERL_LIB=%PREFIX%\lib\perl5
 set ARCH_LIB=%PERL_LIB%\%MAJOR_MINOR%
 
-REM specifying PLMAKE below doesn't seem to be sufficient -- gmake still called in places
-copy %BUILD_PREFIX%\Library\bin\make.exe ^
- %BUILD_PREFIX%\Library\bin\gmake.exe
-
 if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
 cd win32
 
-make -j%CPU_COUNT% ^
+nmake ^
  INST_TOP=%PREFIX% ^
- CCHOME=%BUILD_PREFIX%\Library\mingw-w64 ^
  USE_64_BIT_INT=define ^
  PKG_VERS=%MAJOR_MINOR%
 
 if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
-make -j%CPU_COUNT% ^
+nmake ^
  INST_TOP=%PREFIX% ^
- CCHOME=%BUILD_PREFIX%\Library\mingw-w64 ^
  PKG_VERS=%MAJOR_MINOR% ^
  install
+
+REM This is a backward-compatability hack to ensure compatability with parts
+REM of the conda toolchain
+copy %PREFIX%\bin\perl.exe %PREFIX%\Library\bin
 
 if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
@@ -67,12 +65,11 @@ if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 REM Currently this needs to be done *after* install because the
 REM linker paths are set to the installed locations. Possibly there
 REM is a better approach for this.
-make ^
- INST_TOP=%PREFIX% ^
- CCHOME=%BUILD_PREFIX%\Library\mingw-w64 ^
- PKG_VERS=%MAJOR_MINOR% ^
- HARNESS_OPTIONS=j%CPU_COUNT% ^
- test
+REM nmake ^
+REM INST_TOP=%PREFIX% ^
+REM PKG_VERS=%MAJOR_MINOR% ^
+REM HARNESS_OPTIONS=j%CPU_COUNT% ^
+REM test
 
 if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
