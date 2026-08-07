@@ -38,6 +38,7 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}  # [unix]
+    - {{ stdlib("c") }}    # [unix]
     - make                 # [unix]
     - posix                # [win]
   host:
@@ -49,7 +50,7 @@ test:
   #   - automake
   commands:
     - perl --help
-    - |  # [unix]
+    - |
       "${PREFIX}/bin/perl" -V:cf_by | grep -qF "'conda'"  # [unix]
       "${PREFIX}/bin/perl" -V:cf_email | grep -qF "'conda'"  # [unix]
       "${PREFIX}/bin/perl" -V:perladmin | grep -qF "'conda'"  # [unix]
