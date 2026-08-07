@@ -1,7 +1,30 @@
 About perl-feedstock
 ====================
 
-Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/perl-feedstock/blob/main/LICENSE.txt)
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/feedstock-feedstock/blob/main/LICENSE.txt)
+
+
+About perl
+----------
+
+Home: http://www.perl.org/
+
+Package license: GPL-1.0-or-later OR Artistic-1.0-Perl
+
+Summary: The Perl programming language interpreter.
+
+Development: https://perl5.git.perl.org/perl.git
+
+Documentation: https://www.perl.org/docs.html
+
+Perl 5 is a highly capable, feature-rich programming language with over 29
+years of development. Perl 5 runs on over 100 platforms from portables to
+mainframes and is suitable for both rapid prototyping and large scale
+development projects.
+
+
+About perl
+----------
 
 Home: http://www.perl.org/
 
@@ -26,8 +49,8 @@ Current build status
 <table><tr>
     <td>GitHub Actions</td>
     <td>
-      <a href="https://github.com/conda-forge/perl-feedstock/actions/workflows/conda-build.yml">
-        <img src="https://github.com/conda-forge/perl-feedstock/actions/workflows/conda-build.yml/badge.svg?event=push&branch=main">
+      <a href="https://github.com/conda-forge/feedstock-feedstock/actions/workflows/conda-build.yml">
+        <img src="https://github.com/conda-forge/feedstock-feedstock/actions/workflows/conda-build.yml/badge.svg?event=push&branch=main">
       </a>
     </td>
   </tr>
@@ -37,8 +60,8 @@ Current build status
     <td>
       <details>
         <summary>
-          <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=768&branchName=main">
-            <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/perl-feedstock?branchName=main">
+          <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=None&branchName=main">
+            <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/feedstock-feedstock?branchName=main">
           </a>
         </summary>
         <table>
@@ -46,15 +69,8 @@ Current build status
           <tbody><tr>
               <td>osx_64</td>
               <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=768&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/perl-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>win_64</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=768&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/perl-feedstock?branchName=main&jobName=win&configuration=win%20win_64_" alt="variant">
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=None&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/feedstock-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
                 </a>
               </td>
             </tr>
@@ -82,31 +98,73 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `perl` can be installed with `conda`:
+How to use
+----------
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda install perl
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba install perl
 ```
 
-It is possible to list all of the versions of `perl` available on your platform with `conda`:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+# for adding to your local project
+pixi add perl
+# for installing globally
+pixi global install perl
+```
+
+</details>
+
+Search package versions
+-----------------------
+
+It is possible to list all of the versions of `perl` available on your platform:
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda search perl --channel conda-forge
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba search perl --channel conda-forge
 ```
 
-Alternatively, `mamba repoquery` may provide more information:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+pixi search perl --channel conda-forge
+```
+
+</details>
+
+<details>
+<summary>With mamba repoquery, which may provide more information</summary>
 
 ```
 # Search all versions available on your platform:
@@ -118,6 +176,8 @@ mamba repoquery whoneeds perl --channel conda-forge
 # List dependencies of `perl`:
 mamba repoquery depends perl --channel conda-forge
 ```
+
+</details>
 
 
 About conda-forge
