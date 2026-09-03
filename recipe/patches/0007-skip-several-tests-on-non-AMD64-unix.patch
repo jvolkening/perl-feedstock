@@ -1,12 +1,12 @@
-From 5a8fbc39cbe2f72a0ff41f0d0ed77b16dab410bd Mon Sep 17 00:00:00 2001
-From: jvolkening <jdvolkening@gmail.com>
-Date: Tue, 11 Mar 2025 21:57:05 -0500
+From 773490a9a7e18b9d977ed387f6ce29041c08ff60 Mon Sep 17 00:00:00 2001
+From: jvolkening <jdv@base2bio.com>
+Date: Thu, 3 Sep 2026 12:12:16 -0500
 Subject: [PATCH] skip several tests on non-AMD64 unix
 
 ---
  dist/threads/t/join.t | 7 +++++--
- t/op/magic.t          | 7 ++++---
- 2 files changed, 9 insertions(+), 5 deletions(-)
+ t/op/magic.t          | 9 ++++++---
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
 diff --git a/dist/threads/t/join.t b/dist/threads/t/join.t
 index 2272e07..0d9ccdc 100644
@@ -45,18 +45,18 @@ index 2272e07..0d9ccdc 100644
  
  {
 diff --git a/t/op/magic.t b/t/op/magic.t
-index e0dfcf9..916a18f 100644
+index b91c4d9..85651f7 100644
 --- a/t/op/magic.t
 +++ b/t/op/magic.t
-@@ -55,6 +55,7 @@ $Is_VMS      = $^O eq 'VMS';
- $Is_Dos      = $^O eq 'dos';
+@@ -53,6 +53,7 @@ $Is_MSWin32  = $^O eq 'MSWin32';
+ $Is_VMS      = $^O eq 'VMS';
  $Is_os2      = $^O eq 'os2';
  $Is_Cygwin   = $^O eq 'cygwin';
 +$Is_AMD64    = $Config{archname} =~ /^x86_64/;
  
  $PERL =
-    ($Is_NetWare ? 'perl'   :
-@@ -408,7 +409,7 @@ EOP
+    ($Is_VMS     ? $^X      :
+@@ -405,7 +406,7 @@ EOP
  # argv[0] assignment and by calling prctl()
  {
    SKIP: {
@@ -65,7 +65,23 @@ index e0dfcf9..916a18f 100644
  
      # We don't really need these tests. prctl() is tested in the
      # Kernel, but test it anyway for our sanity. If something doesn't
-@@ -908,8 +909,8 @@ SKIP: {
+@@ -496,6 +497,7 @@ SKIP:
+   SKIP: {
+     my $skip_tests = 2;
+     skip "Test is for Linux, not $^O", $skip_tests if $^O ne 'linux';
++    skip "Conda: only test on AMD64", $skip_tests if !$Is_AMD64;
+     my $slurp = $linux_cmdline_cr->($skip_tests);
+     is( $slurp, $char_with_utf8_pv,
+         '/proc cmdline shows as expected (compare to UTF8-flagged)' );
+@@ -521,6 +523,7 @@ SKIP:
+   SKIP: {
+     my $skip_tests = 1;
+     skip "Test is for Linux, not $^O" if $^O ne 'linux';
++    skip "Conda: only test on AMD64" if !$Is_AMD64;
+     is( $linux_cmdline_cr->($skip_tests), $name_utf8_bytes, '.. and /proc cmdline shows that');
+   }
+ 
+@@ -908,8 +911,8 @@ SKIP: {
  	env_is(__NoNeLoCaL => '');
  
      SKIP: {
@@ -77,5 +93,5 @@ index e0dfcf9..916a18f 100644
          SKIP: {
              skip("No procfs cmdline support", 1)
 -- 
-2.39.5
+2.47.3
 
