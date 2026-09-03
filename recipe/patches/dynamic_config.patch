@@ -54,7 +54,7 @@
  zcat=''
  zip='zip'
  !END!
-+$_ =~ s/__COMPILER_ROOT__/$compiler_root/g;
++$_ =~ s/__COMPILER_ROOT__/$compilerroot/g;
  
  my $i = ord(8);
  foreach my $c (7,6,5,4,3,2,1) { $i <<= 8; $i |= ord($c); }
