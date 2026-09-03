@@ -1,4 +1,4 @@
-{% set version = "5.32.1" %}
+{% set version = "5.38.5" %}
 {% set major_minor_version = version.split(".")[:2] | join(".") %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: http://www.cpan.org/src/5.0/perl-{{ version }}.tar.xz
-    sha256: 57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309
+    sha256: 293efd3c7d100c470624a56a18f85fd656207bf124460e76709d94b8bae14422
     patches:
       - patches/0001-Use-userelocatableinc-together-with-useshrplib.patch  # [unix]
       - patches/0002-Disable-direct-invocation-of-linker-if-LD-is-set.patch
@@ -20,7 +20,8 @@ source:
       - patches/0009-skip-known-failing-DynaLoader-test-on-OS-X.patch  # [osx]
 
 build:
-  number: 8
+  number: 0
+  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5
   run_exports:
     weak:
       - {{ pin_subpackage("perl", max_pin="x.x") }}
