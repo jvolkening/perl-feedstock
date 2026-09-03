@@ -65,17 +65,17 @@ index e0dfcf9..916a18f 100644
  
      # We don't really need these tests. prctl() is tested in the
      # Kernel, but test it anyway for our sanity. If something doesn't
-@@ -797,8 +798,8 @@ SKIP: {
+@@ -908,8 +909,8 @@ SKIP: {
  	env_is(__NoNeLoCaL => '');
  
      SKIP: {
--	    skip("\$0 check only on Linux and FreeBSD", 2)
--		unless $^O =~ /^(linux|android|freebsd)$/
-+	    skip("\$0 check only on Linux and FreeBSD (on AMD64)", 2)
-+		unless ($^O =~ /^(linux|android|freebsd)$/ && $Is_AMD64)
- 		    && open CMDLINE, "/proc/$$/cmdline";
+-        skip("\$0 check only on Linux, Dragonfly BSD and FreeBSD", 2)
+-        unless $^O =~ /^(linux|android|dragonfly|freebsd)$/;
++        skip("\$0 check only on Linux, Dragonfly BSD and FreeBSD (on AMD64)", 2)
++        unless ($^O =~ /^(linux|android|dragonfly|freebsd)$/ && $Is_AMD64);
  
- 	    chomp(my $line = scalar <CMDLINE>);
+         SKIP: {
+             skip("No procfs cmdline support", 1)
 -- 
 2.39.5
 

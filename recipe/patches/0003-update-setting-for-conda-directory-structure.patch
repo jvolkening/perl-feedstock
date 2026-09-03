@@ -27,9 +27,9 @@ index 5924d84..382616b 100644
  # Visual C++ 2019 (aka Visual C++ 14.2) (full version or Community Edition)
 -#CCTYPE		= MSVC142
 +CCTYPE		= MSVC142
+ # Visual C++ 2022 (aka Visual C++ 14.3) (full version or Community Edition)
+ #CCTYPE		= MSVC143
  
- #
- # If you are using Intel C++ Compiler uncomment this
 @@ -254,7 +254,7 @@ EXTRALIBDIRS	=
  # set this to your email address (perl will guess a value from
  # your loginname and your hostname, which may not be right)
@@ -244,10 +244,10 @@ index a2c3f5a..b3dfbbc 100644
  package='perl5'
  pager='more /e'
  passcat=''
-@@ -954,9 +952,9 @@ perl5=''
- perl='perl'
+@@ -954,9 +952,9 @@ perl='perl'
  perl_patchlevel='~PERL_PATCHLEVEL~'
  perl_static_inline='static __inline'
+ perl_thread_local=''
 -perladmin=''
 +perladmin='conda'
  perllibs='~libs~'
@@ -314,10 +314,10 @@ index a2c3f5a..b3dfbbc 100644
  sizesize='4'
  sizetype='size_t'
  sleep=''
-@@ -1115,7 +1113,7 @@ uname='uname'
+@@ -1115,7 +1113,7 @@ uidtype='uid_t'
+ uname='uname'
  uniq='uniq'
  uquadtype='unsigned __int64'
- use5005threads='undef'
 -use64bitall='undef'
 +use64bitall='define'
  use64bitint='undef'
