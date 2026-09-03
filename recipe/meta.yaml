@@ -12,7 +12,6 @@ source:
       - patches/0001-Use-userelocatableinc-together-with-useshrplib.patch  # [unix]
       - patches/0002-Disable-direct-invocation-of-linker-if-LD-is-set.patch
       - patches/0003-update-setting-for-conda-directory-structure.patch  # [win]
-      - patches/0004-skip-failing-Net-Ping-test-on-win.patch  # [win]
       - patches/0005-skip-perlbug-test-that-fails-on-multiple-platforms.patch
       - patches/0006-allow-t-TTY-to-fail-on-Windows.patch  # [win]
       - patches/0007-skip-several-tests-on-non-AMD64-unix.patch  # [unix]
