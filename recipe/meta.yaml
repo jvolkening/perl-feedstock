@@ -1,4 +1,4 @@
-{% set version = "5.38.5" %}
+{% set version = "5.40.5" %}
 {% set major_minor_version = version.split(".")[:2] | join(".") %}
 
 package:
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: http://www.cpan.org/src/5.0/perl-{{ version }}.tar.xz
-    sha256: 293efd3c7d100c470624a56a18f85fd656207bf124460e76709d94b8bae14422
+    sha256: 1fe6f825b487d26c35aa51a35f52fe494d4cfc77b8051f8b1ee3391bf0289bc6
     patches:
       - patches/0001-Use-userelocatableinc-together-with-useshrplib.patch  # [unix]
       - patches/0002-Disable-direct-invocation-of-linker-if-LD-is-set.patch
