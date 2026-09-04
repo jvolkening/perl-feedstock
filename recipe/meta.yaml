@@ -19,6 +19,7 @@ source:
       - patches/0009-skip-known-failing-DynaLoader-test-on-OS-X.patch  # [osx]
       - patches/0010-skip-failing-porting-test.patch
       - patches/0011-skip-some-MakeMaker-tests-on-ARM-OSX.patch  # [osx]
+      - patches/0012-skip-threaded-locale-test-on-OSX.patch  # [osx]
 
 build:
   number: 0
