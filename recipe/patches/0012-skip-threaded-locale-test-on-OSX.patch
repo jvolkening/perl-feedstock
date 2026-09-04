@@ -17,7 +17,7 @@ index 86036f0..3ac1e63 100644
      skip("Unsafe locale threads", 1) unless ${^SAFE_LOCALES};
 +    # currently fails on conda OSX builds
 +    skip_all("Fails on conda builds on OSX")
-+        if ($^O ne 'darwin');
++        if ($^O eq 'darwin');
  
      # The second test is several threads nearly simulataneously executing
      # locale-sensitive operations with the categories set to disparate
