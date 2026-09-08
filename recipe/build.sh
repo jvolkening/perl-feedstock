@@ -75,6 +75,15 @@ if [[ "${target_platform}" == linux-* ]]; then
 # elif [[ "${target_platform}" == osx-* ]]; then
 #   _config_args+=(-Dlddlflags=" -bundle -undefined dynamic_lookup ${LDFLAGS}")
 fi
+
+# Perl 5.32.1 can mis-detect the malloc/free signatures when configured for
+# linux-riscv64 under emulation.  Modern libc uses void * for malloc and void
+# for free, matching Debian's riscv64 Perl configuration.  GCC 15 rejects the
+# resulting incompatible declarations when the types are detected incorrectly.
+if [[ "${target_platform}" == linux-riscv64 ]]; then
+  _config_args+=("-Dmalloctype=void *" "-Dfreetype=void")
+fi
+
 # -Dsysroot prevents Configure rummaging around in /usr and
 # linking to system libraries (like GDBM, which is GPL). An
 # alternative is to pass -Dusecrosscompile but that prevents
