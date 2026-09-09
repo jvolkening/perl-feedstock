@@ -72,6 +72,7 @@ if [[ -n "${AR}" ]]; then
 fi
 if [[ "${target_platform}" == linux-* ]]; then
   _config_args+=(-Dlddlflags="-shared ${LDFLAGS}")
+  _config_args+=(-Dd_procselfexe)
 # elif [[ "${target_platform}" == osx-* ]]; then
 #   _config_args+=(-Dlddlflags=" -bundle -undefined dynamic_lookup ${LDFLAGS}")
 fi
