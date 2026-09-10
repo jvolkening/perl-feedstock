@@ -72,6 +72,8 @@ test:
     - perl -V:sitearch | findstr "/C:%PREFIX:\=/%\Library\site\lib"  # [win]
     - perl -V:vendorlib | findstr "/C:%PREFIX:\=/%\Library\vendor\lib"  # [win]
     - perl -V:vendorarch | findstr "/C:%PREFIX:\=/%\Library\vendor\lib"  # [win]
+    # regression test for #79
+    - perl -Mstrict -e "print qq{Module loading succeeded\n}"
 
 about:
   home: http://www.perl.org/
