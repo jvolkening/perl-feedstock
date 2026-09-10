@@ -155,3 +155,8 @@ done
 # Add empty perllocal.pod to avoid Perl packages clobbering on that file.
 # (If all recipes used ExtUtils::MakeMaker's NO_PERLLOCAL=1 this wouldn't be needed).
 touch "${perl_archlib/...\/../${PREFIX}}${perl_core}"/perllocal.pod
+
+if [[ "${target_platform}" == "linux-64" ]]; then
+  perl -e 'use strict; print "ok\n"'
+  strace perl -e 'use strict; print "ok\n"'
+fi
