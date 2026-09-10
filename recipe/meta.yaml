@@ -69,6 +69,7 @@ test:
     - perl -e "print \"$_\n\" for @INC" | findstr /E "lib/perl5/{{ major_minor_version }}/site_perl"  # [win]
     - perl -e "print \"$_\n\" for @INC" | findstr /E "lib/perl5/{{ major_minor_version }}/vendor_perl"  # [win]
     - perl -e "print \"$_\n\" for @INC" | findstr /E "lib/perl5/{{ major_minor_version }}/core_perl"  # [win]
+    - perl -Mstrict -e 'print "Module loading succeeded\n"'
 
 about:
   home: http://www.perl.org/
