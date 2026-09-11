@@ -1,4 +1,0 @@
-# with GCC 15, we run into:
-#   error: passing argument 1 of 'Perl_safesysfree' from incompatible pointer type [-Wincompatible-pointer-types]
-c_compiler_version:     # [linux]
-  - 14                  # [linux]

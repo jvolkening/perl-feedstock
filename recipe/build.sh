@@ -78,11 +78,9 @@ if [[ "${target_platform}" == linux-* ]]; then
 #   _config_args+=(-Dlddlflags=" -bundle -undefined dynamic_lookup ${LDFLAGS}")
 fi
 
-# Perl 5.32.1 can mis-detect the malloc/free signatures when configured for
-# linux-riscv64 under emulation.  Modern libc uses void * for malloc and void
-# for free, matching Debian's riscv64 Perl configuration.  GCC 15 rejects the
+# GCC 15 switches to C23 by default, which fails Configure's malloc probe and rejects the
 # resulting incompatible declarations when the types are detected incorrectly.
-if [[ "${target_platform}" == linux-riscv64 ]]; then
+if [[ "${target_platform}" == linux-* ]]; then
   _config_args+=("-Dmalloctype=void *" "-Dfreetype=void")
 fi
 
