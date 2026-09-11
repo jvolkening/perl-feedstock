@@ -1,12 +1,12 @@
-From 773490a9a7e18b9d977ed387f6ce29041c08ff60 Mon Sep 17 00:00:00 2001
+From 88466f26388affec746007568dba847d1f37375f Mon Sep 17 00:00:00 2001
 From: jvolkening <jdv@base2bio.com>
-Date: Thu, 3 Sep 2026 12:12:16 -0500
+Date: Fri, 11 Sep 2026 15:50:06 -0500
 Subject: [PATCH] skip several tests on non-AMD64 unix
 
 ---
- dist/threads/t/join.t | 7 +++++--
- t/op/magic.t          | 9 ++++++---
- 2 files changed, 11 insertions(+), 5 deletions(-)
+ dist/threads/t/join.t |  7 +++++--
+ t/op/magic.t          | 11 +++++++----
+ 2 files changed, 12 insertions(+), 6 deletions(-)
 
 diff --git a/dist/threads/t/join.t b/dist/threads/t/join.t
 index 2272e07..0d9ccdc 100644
@@ -45,7 +45,7 @@ index 2272e07..0d9ccdc 100644
  
  {
 diff --git a/t/op/magic.t b/t/op/magic.t
-index b91c4d9..85651f7 100644
+index 49e39b7..823f856 100644
 --- a/t/op/magic.t
 +++ b/t/op/magic.t
 @@ -53,6 +53,7 @@ $Is_MSWin32  = $^O eq 'MSWin32';
@@ -65,23 +65,23 @@ index b91c4d9..85651f7 100644
  
      # We don't really need these tests. prctl() is tested in the
      # Kernel, but test it anyway for our sanity. If something doesn't
-@@ -496,6 +497,7 @@ SKIP:
+@@ -499,6 +500,7 @@ SKIP:
    SKIP: {
      my $skip_tests = 2;
      skip "Test is for Linux, not $^O", $skip_tests if $^O ne 'linux';
-+    skip "Conda: only test on AMD64", $skip_tests if !$Is_AMD64;
++    skip "Conda builds: problems with /proc when cross-compiling", $skip_tests;
      my $slurp = $linux_cmdline_cr->($skip_tests);
      is( $slurp, $char_with_utf8_pv,
          '/proc cmdline shows as expected (compare to UTF8-flagged)' );
-@@ -521,6 +523,7 @@ SKIP:
+@@ -524,6 +526,7 @@ SKIP:
    SKIP: {
      my $skip_tests = 1;
      skip "Test is for Linux, not $^O" if $^O ne 'linux';
-+    skip "Conda: only test on AMD64" if !$Is_AMD64;
++    skip "Conda builds: problems with /proc when cross-compiling", $skip_tests;
      is( $linux_cmdline_cr->($skip_tests), $name_utf8_bytes, '.. and /proc cmdline shows that');
    }
  
-@@ -908,8 +911,8 @@ SKIP: {
+@@ -911,13 +914,13 @@ SKIP: {
  	env_is(__NoNeLoCaL => '');
  
      SKIP: {
@@ -92,6 +92,12 @@ index b91c4d9..85651f7 100644
  
          SKIP: {
              skip("No procfs cmdline support", 1)
+                 unless open CMDLINE, "/proc/$$/cmdline";
+-
++            skip "Conda builds: problems with /proc when cross-compiling", 1;
+             chomp(my $line = scalar <CMDLINE>);
+             my $me = (split /\0/, $line)[0];
+             is $me, $0, 'altering $0 is effective (testing with /proc/)';
 -- 
 2.47.3
 
