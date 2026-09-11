@@ -20,7 +20,7 @@ source:
     # sha1 hashes published at: http://strawberryperl.com/releases.html
 
 build:
-  number: 8
+  number: 9
   string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_strawberry  # [win]
   string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5       # [not win]
   run_exports:
@@ -40,7 +40,8 @@ requirements:
     - {{ compiler('c') }}  # [unix]
     - {{ stdlib("c") }}    # [unix]
     - make                 # [unix]
-    - posix                # [win]
+    - m2-base              # [win]
+    - m2-make              # [win]
   host:
     - libxcrypt  # [linux]
 
@@ -51,15 +52,15 @@ test:
   commands:
     - perl --help
     - |
-      "${PREFIX}/bin/perl" -V:cf_by | grep -qF "'conda'"  # [unix]
-      "${PREFIX}/bin/perl" -V:cf_email | grep -qF "'conda'"  # [unix]
-      "${PREFIX}/bin/perl" -V:perladmin | grep -qF "'conda'"  # [unix]
-      "${PREFIX}/bin/perl" -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/site_perl"  # [unix]
-      "${PREFIX}/bin/perl" -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/vendor_perl"  # [unix]
-      "${PREFIX}/bin/perl" -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/core_perl"  # [unix]
-      "${PREFIX}/bin/perl" -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/site_perl"  # [unix]
-      "${PREFIX}/bin/perl" -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/vendor_perl"  # [unix]
-      "${PREFIX}/bin/perl" -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/core_perl"  # [unix]
+      perl -V:cf_by | grep -qF "'conda'"  # [unix]
+      perl -V:cf_email | grep -qF "'conda'"  # [unix]
+      perl -V:perladmin | grep -qF "'conda'"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/site_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/vendor_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/core_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/site_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/vendor_perl"  # [unix]
+      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/core_perl"  # [unix]
     # conda replaces back- by forward slashes during prefix placeholder replacement on installs:
     #   This means our Config.pm and Config_heavy.pl etc. carry mixed back-/forward slashes
     #   which Perl seems to handle well, though.
@@ -72,6 +73,8 @@ test:
     - perl -V:sitearch | findstr "/C:%PREFIX:\=/%\Library\site\lib"  # [win]
     - perl -V:vendorlib | findstr "/C:%PREFIX:\=/%\Library\vendor\lib"  # [win]
     - perl -V:vendorarch | findstr "/C:%PREFIX:\=/%\Library\vendor\lib"  # [win]
+    # regression test for #79
+    - perl -Mstrict -e "print qq{Module loading succeeded\n}"
 
 about:
   home: http://www.perl.org/
@@ -94,6 +97,5 @@ extra:
   recipe-maintainers:
     - jakirkham
     - msarahan
-    - mingwandroid
     - isuruf
     - mbargull
