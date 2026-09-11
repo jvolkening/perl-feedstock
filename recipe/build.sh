@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [[ "${build_platform}" == "osx-"* && "${target_platform}" == "osx-" && "${build_platform}" != "${target_platform}" ]]; then
+  archflags="-arch x86_64 -arch arm64"
+  export MACOSX_DEPLOYMENT_TARGET=11.0
+fi
+
+
 if [[ "${target_platform}" == osx-* ]]; then
   if [[ "${target_platform}" == osx-64 ]]; then
     CFLAGS="${CFLAGS} -D_DARWIN_FEATURE_CLOCK_GETTIME=0"
