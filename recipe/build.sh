@@ -1,11 +1,11 @@
 #!/bin/bash
 
 CPU_COUNT=${CPU_COUNT:=1}
-
-if [[ "${build_platform}" == osx-64 && "${target_platform}" == osx-arm64 ]]; then
+if [[ "${build_platform}" == "osx-"* && "${target_platform}" == "osx-" && "${build_platform}" != "${target_platform}" ]]; then
   archflags="-arch x86_64 -arch arm64"
-  export MACOSX_DEPLOYMENT_TARGET=10.9
+  export MACOSX_DEPLOYMENT_TARGET=11.0
 fi
+
 
 if [[ "${target_platform}" == osx-* ]]; then
   if [[ "${target_platform}" == osx-64 ]]; then
@@ -74,9 +74,18 @@ if [[ -n "${AR}" ]]; then
 fi
 if [[ "${target_platform}" == linux-* ]]; then
   _config_args+=(-Dlddlflags="-shared ${LDFLAGS}")
+  _config_args+=(-Dprocselfexe='"/proc/self/exe"')
+  _config_args+=(-Dd_procselfexe="define")
 # elif [[ "${target_platform}" == osx-* ]]; then
 #   _config_args+=(-Dlddlflags=" -bundle -undefined dynamic_lookup ${LDFLAGS}")
 fi
+
+# GCC 15 switches to C23 by default, which fails Configure's malloc probe and rejects the
+# resulting incompatible declarations when the types are detected incorrectly.
+if [[ "${target_platform}" == linux-* ]]; then
+  _config_args+=("-Dmalloctype=void *" "-Dfreetype=void")
+fi
+
 # -Dsysroot prevents Configure rummaging around in /usr and
 # linking to system libraries (like GDBM, which is GPL). An
 # alternative is to pass -Dusecrosscompile but that prevents
@@ -147,3 +156,7 @@ done
 # Add empty perllocal.pod to avoid Perl packages clobbering on that file.
 # (If all recipes used ExtUtils::MakeMaker's NO_PERLLOCAL=1 this wouldn't be needed).
 touch "${perl_archlib/...\/../${PREFIX}}${perl_core}"/perllocal.pod
+
+if [[ "${build_platform}" == "${target_platform}" ]]; then
+  perl -e 'use strict; print "ok\n"'
+fi

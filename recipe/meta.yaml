@@ -46,7 +46,7 @@ test:
   #   - automake
   commands:
     - perl --version
-    - |  # [unix]
+    - |
       perl -V:cf_by | grep -qF "'conda'"  # [unix]
       perl -V:cf_email | grep -qF "'conda'"  # [unix]
       perl -V:perladmin | grep -qF "'conda'"  # [unix]
@@ -69,6 +69,7 @@ test:
     - perl -e "print \"$_\n\" for @INC" | findstr /E "lib/perl5/{{ major_minor_version }}/site_perl"  # [win]
     - perl -e "print \"$_\n\" for @INC" | findstr /E "lib/perl5/{{ major_minor_version }}/vendor_perl"  # [win]
     - perl -e "print \"$_\n\" for @INC" | findstr /E "lib/perl5/{{ major_minor_version }}/core_perl"  # [win]
+    # regression test for #79
     - perl -Mstrict -e "print qq{Module loading succeeded\n}"
 
 about:
