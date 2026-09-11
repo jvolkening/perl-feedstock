@@ -40,7 +40,8 @@ requirements:
     - {{ compiler('c') }}  # [unix]
     - {{ stdlib("c") }}    # [unix]
     - make                 # [unix]
-    - posix                # [win]
+    - m2-base              # [win]
+    - m2-make              # [win]
   host:
     - libxcrypt  # [linux]
 
