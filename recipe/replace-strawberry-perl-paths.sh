@@ -9,7 +9,7 @@ rm './lib/perllocal.pod'
 touch './lib/perllocal.pod'
 
 STRAWBERRY_PREFIX='C:\strawberry\perl'
-for pathsep in '/' '\' '\\' ; do
+for pathsep in '/' '\\' '\\\\' ; do
     _strawberry_prefix="${STRAWBERRY_PREFIX//\\/${pathsep//\\/\\\\}}"
     _library_prefix="${LIBRARY_PREFIX//\\/${pathsep//\\/\\\\}}"
     grep -rl "${_strawberry_prefix}" \
