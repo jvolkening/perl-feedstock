@@ -24,8 +24,8 @@ jobs:
         include:
           - CONFIG: linux_64_
             CONFIG_SHORT: linux_64_
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:cos7
-            STORE_BUILD_ARTIFACTS: False
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma10
+            STORE_BUILD_ARTIFACTS: True
             UPLOAD_PACKAGES: True
             build_workspace_dir: build_artifacts
             docker_run_args: 
@@ -37,8 +37,8 @@ jobs:
             tools_install_dir: ~/miniforge3
           - CONFIG: linux_aarch64_
             CONFIG_SHORT: linux_aarch64_
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64:cos7
-            STORE_BUILD_ARTIFACTS: False
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64:alma10
+            STORE_BUILD_ARTIFACTS: True
             UPLOAD_PACKAGES: True
             build_workspace_dir: build_artifacts
             docker_run_args: 
@@ -50,9 +50,9 @@ jobs:
             tools_install_dir: ~/miniforge3
           - CONFIG: linux_ppc64le_
             CONFIG_SHORT: linux_ppc64le_
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma10
+            STORE_BUILD_ARTIFACTS: True
             UPLOAD_PACKAGES: True
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-ppc64le:cos7
-            STORE_BUILD_ARTIFACTS: False
             build_workspace_dir: build_artifacts
             docker_run_args: 
             free_disk_space: skip
