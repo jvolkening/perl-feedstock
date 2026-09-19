@@ -21,7 +21,7 @@ index 5924d84..382616b 100644
  
  #
  # Uncomment this if you want to disable looking up values from
-@@ -131,7 +131,7 @@ DEFAULT_INC_EXCLUDES_DOT = define
+@@ -131,7 +131,7 @@ CCTYPE		= MSVC140
  # Visual C++ 2017 (aka Visual C++ 14.1) (full version or Community Edition)
  #CCTYPE		= MSVC141
  # Visual C++ 2019 (aka Visual C++ 14.2) (full version or Community Edition)
@@ -29,7 +29,7 @@ index 5924d84..382616b 100644
 +CCTYPE		= MSVC142
  # Visual C++ 2022 (aka Visual C++ 14.3) (full version or Community Edition)
  #CCTYPE		= MSVC143
- 
+ # Visual C++ 2026 (aka Visual C++ 14.5) (full version or Community Edition)
 @@ -254,7 +254,7 @@ EXTRALIBDIRS	=
  # set this to your email address (perl will guess a value from
  # your loginname and your hostname, which may not be right)
@@ -154,7 +154,7 @@ index a2c3f5a..b3dfbbc 100644
 -installprefix='~INST_TOP~~INST_VER~'
 -installprefixexp='~INST_TOP~~INST_VER~'
 -installprivlib='~INST_TOP~~INST_VER~\lib'
--installscript='~INST_TOP~~INST_VER~\bin'
+-installscript='~INST_TOP~~INST_VER~\bin~INST_ARCH~'
 -installsitearch='~INST_TOP~\site~INST_VER~\lib~INST_ARCH~'
 -installsitebin='~INST_TOP~~INST_VER~\bin~INST_ARCH~'
 +installman1dir='~INST_TOP~/man/man1'
@@ -170,7 +170,7 @@ index a2c3f5a..b3dfbbc 100644
 -installsitelib='~INST_TOP~\site~INST_VER~\lib'
 -installsiteman1dir=''
 -installsiteman3dir=''
--installsitescript=''
+-installsitescript='~INST_TOP~~INST_VER~\bin~INST_ARCH~'
 -installstyle='lib'
 +installsitelib='~INST_TOP~/lib/perl5/site_perl'
 +installsiteman1dir='~INST_TOP~/man/man1'
@@ -192,9 +192,9 @@ index a2c3f5a..b3dfbbc 100644
 +installvendorman1dir='~INST_TOP~/man/man1'
 +installvendorman3dir='~INST_TOP~/man/man3'
 +installvendorscript='~INST_TOP~/bin'
+ intmaxsize='8'
  intsize='4'
  issymlink=''
- ivdformat='"ld"'
 @@ -853,9 +851,9 @@ ivtype='long'
  known_extensions='~static_ext~ ~dynamic_ext~ ~nonxs_ext~'
  ksh=''
