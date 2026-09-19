@@ -65,11 +65,11 @@ if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 REM Currently this needs to be done *after* install because the
 REM linker paths are set to the installed locations. Possibly there
 REM is a better approach for this.
-REM nmake ^
-REM INST_TOP=%PREFIX% ^
-REM PKG_VERS=%MAJOR_MINOR% ^
-REM HARNESS_OPTIONS=j%CPU_COUNT% ^
-REM test
+nmake ^
+ INST_TOP=%PREFIX% ^
+ PKG_VERS=%MAJOR_MINOR% ^
+ HARNESS_OPTIONS=j%CPU_COUNT% ^
+ test
 
 if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
