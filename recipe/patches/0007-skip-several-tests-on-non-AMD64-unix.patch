@@ -1,62 +1,25 @@
-From 88466f26388affec746007568dba847d1f37375f Mon Sep 17 00:00:00 2001
+From f1b4c86b1cc8c1829b1aaea404179f1e98352e1d Mon Sep 17 00:00:00 2001
 From: jvolkening <jdv@base2bio.com>
-Date: Fri, 11 Sep 2026 15:50:06 -0500
+Date: Sat, 19 Sep 2026 12:41:40 -0500
 Subject: [PATCH] skip several tests on non-AMD64 unix
 
 ---
- dist/threads/t/join.t |  7 +++++--
- t/op/magic.t          | 11 +++++++----
- 2 files changed, 12 insertions(+), 6 deletions(-)
+ t/op/magic.t | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/dist/threads/t/join.t b/dist/threads/t/join.t
-index 2272e07..0d9ccdc 100644
---- a/dist/threads/t/join.t
-+++ b/dist/threads/t/join.t
-@@ -9,10 +9,13 @@ BEGIN {
-     }
- }
- 
-+use Config;
- use ExtUtils::testlib;
- 
- use threads;
- 
-+my $Is_AMD64 = $Config{archname} =~ /^x86_64/;
-+
- BEGIN {
-     if (! eval 'use threads::shared; 1') {
-         print("1..0 # SKIP threads::shared not available\n");
-@@ -109,7 +112,7 @@ sub skip {
- }
- 
- # We parse ps output so this is OS-dependent.
--if ($^O eq 'linux') {
-+if ($^O eq 'linux' && $Is_AMD64) {
-     # First modify $0 in a subthread.
-     #print "# mainthread: \$0 = $0\n";
-     threads->create(sub{ #print "# subthread: \$0 = $0\n";
-@@ -141,7 +144,7 @@ if ($^O eq 'linux') {
-         skip("\$0 check: opening 'ps -f |' failed: $!");
-     }
- } else {
--    skip("\$0 check: only on Linux");
-+    skip("\$0 check: only on AMD64 Linux");
- }
- 
- {
 diff --git a/t/op/magic.t b/t/op/magic.t
-index 49e39b7..823f856 100644
+index 929a746..0230ac1 100644
 --- a/t/op/magic.t
 +++ b/t/op/magic.t
-@@ -53,6 +53,7 @@ $Is_MSWin32  = $^O eq 'MSWin32';
- $Is_VMS      = $^O eq 'VMS';
+@@ -54,6 +54,7 @@ $Is_VMS      = $^O eq 'VMS';
  $Is_os2      = $^O eq 'os2';
  $Is_Cygwin   = $^O eq 'cygwin';
+ $Is_ZOS      = $^O eq 'os390';
 +$Is_AMD64    = $Config{archname} =~ /^x86_64/;
  
  $PERL =
     ($Is_VMS     ? $^X      :
-@@ -405,7 +406,7 @@ EOP
+@@ -406,7 +407,7 @@ EOP
  # argv[0] assignment and by calling prctl()
  {
    SKIP: {
@@ -65,7 +28,7 @@ index 49e39b7..823f856 100644
  
      # We don't really need these tests. prctl() is tested in the
      # Kernel, but test it anyway for our sanity. If something doesn't
-@@ -499,6 +500,7 @@ SKIP:
+@@ -501,6 +502,7 @@ SKIP:
    SKIP: {
      my $skip_tests = 2;
      skip "Test is for Linux, not $^O", $skip_tests if $^O ne 'linux';
@@ -73,7 +36,7 @@ index 49e39b7..823f856 100644
      my $slurp = $linux_cmdline_cr->($skip_tests);
      is( $slurp, $char_with_utf8_pv,
          '/proc cmdline shows as expected (compare to UTF8-flagged)' );
-@@ -524,6 +526,7 @@ SKIP:
+@@ -526,6 +528,7 @@ SKIP:
    SKIP: {
      my $skip_tests = 1;
      skip "Test is for Linux, not $^O" if $^O ne 'linux';
@@ -81,7 +44,7 @@ index 49e39b7..823f856 100644
      is( $linux_cmdline_cr->($skip_tests), $name_utf8_bytes, '.. and /proc cmdline shows that');
    }
  
-@@ -911,13 +914,13 @@ SKIP: {
+@@ -913,13 +916,13 @@ SKIP: {
  	env_is(__NoNeLoCaL => '');
  
      SKIP: {
