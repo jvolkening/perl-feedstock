@@ -6,16 +6,11 @@ if [[ "${build_platform}" == "osx-"* && "${target_platform}" == "osx-" && "${bui
   export MACOSX_DEPLOYMENT_TARGET=11.0
 fi
 
-
-if [[ "${build_platform}" == osx-* ]]; then
-  # avoid locale errors on OSX
-  export LANG=C
-  export LC_ALL=C
-fi
 if [[ "${target_platform}" == osx-* ]]; then
   if [[ "${target_platform}" == osx-64 ]]; then
     CFLAGS="${CFLAGS} -D_DARWIN_FEATURE_CLOCK_GETTIME=0"
   fi
+  CFLAGS="${CFLAGS} -DHAS_BROKEN_LANGINFO_CODESET"
   ccflags="${CFLAGS} -fno-common -DPERL_DARWIN -no-cpp-precomp -Werror=partial-availability -D_DARWIN_FEATURE_CLOCK_GETTIME=0 -fno-strict-aliasing -pipe -fstack-protector-strong -DPERL_USE_SAFE_PUTENV ${archflags} ${CPPFLAGS}"
 elif [[ "${target_platform}" == linux-* ]]; then
   ccflags="${CFLAGS} -D_REENTRANT -D_GNU_SOURCE -fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2"
