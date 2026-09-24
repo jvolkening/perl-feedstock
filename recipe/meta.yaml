@@ -19,9 +19,10 @@ source:
       - patches/0009-skip-known-failing-DynaLoader-test-on-OS-X.patch  # [osx]
       - patches/0011-skip-some-MakeMaker-tests-on-ARM-OSX.patch  # [osx]
       - patches/0012-skip-threaded-locale-test-on-OSX.patch  # [osx]
+      - patches/0013-fix-relocatableinc-on-Windows.patch  # [win]
 
 build:
-  number: 0
+  number: 1
   string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5
   run_exports:
     weak:

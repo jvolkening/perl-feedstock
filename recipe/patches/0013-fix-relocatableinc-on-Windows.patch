@@ -1,0 +1,105 @@
+From dbb3a0b2b4a95408c281d402131ee8c76fb11fbf Mon Sep 17 00:00:00 2001
+From: jvolkening <jdv@base2bio.com>
+Date: Thu, 24 Sep 2026 16:32:13 -0500
+Subject: [PATCH] fix relocatableinc on Windows
+
+---
+ perl.c | 50 ++++++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 42 insertions(+), 8 deletions(-)
+
+diff --git a/perl.c b/perl.c
+index 59dd10f..983739b 100644
+--- a/perl.c
++++ b/perl.c
+@@ -5041,6 +5041,31 @@ S_incpush_if_exists(pTHX_ AV *const av, SV *dir, SV *const stem)
+ }
+ #endif
+ 
++#ifdef PERL_RELOCATABLE_INC
++/* On Windows, $^X and @INC entries are normally backslash-separated and may
++ * occasionally be mixed with '/'. Every place in S_mayberelocate that scans
++ * for or compares against '/' is extended here to also recognise '\\' on
++ * Windows: without this, the first my_memrchr(prefix, '/', ...) call below
++ * returns NULL on a typical Windows install path, and the whole
++ * "if (lastslash)" block never runs. */
++#  ifdef WIN32
++#    define RELOC_IS_DIRSEP(c) ((c) == '/' || (c) == '\\')
++#  else
++#    define RELOC_IS_DIRSEP(c) ((c) == '/')
++#  endif
++STATIC char *
++S_reloc_memrchr(const char *s, STRLEN len)
++{
++    const char *p = s + len;
++    while (p > s) {
++        p--;
++        if (RELOC_IS_DIRSEP(*p))
++            return (char *)p;
++    }
++    return NULL;
++}
++#endif
++
+ static SV *
+ S_mayberelocate(pTHX_ const char *const dir, STRLEN len, U32 flags)
+ {
+@@ -5096,7 +5121,11 @@ S_mayberelocate(pTHX_ const char *const dir, STRLEN len, U32 flags)
+          */
+             const char *libpath = SvPVX(libdir);
+             STRLEN libpath_len = SvCUR(libdir);
+-            if (memBEGINs(libpath, libpath_len, ".../")) {
++            if (memBEGINs(libpath, libpath_len, ".../")
++#  ifdef WIN32
++                || memBEGINs(libpath, libpath_len, "...\\")
++#  endif
++               ) {
+                 /* Game on!  */
+                 SV * const caret_X = get_sv("\030", 0);
+                 /* Going to use the SV just as a scratch buffer holding a C
+@@ -5123,7 +5152,7 @@ S_mayberelocate(pTHX_ const char *const dir, STRLEN len, U32 flags)
+                 libpath_len = SvCUR(libdir);
+ 
+                 prefix = SvPVX(prefix_sv);
+-                lastslash = (char *) my_memrchr(prefix, '/',
++                lastslash = S_reloc_memrchr(prefix,
+                              SvEND(prefix_sv) - prefix);
+ 
+                 /* First time in with the *lastslash = '\0' we just wipe off
+@@ -5132,16 +5161,20 @@ S_mayberelocate(pTHX_ const char *const dir, STRLEN len, U32 flags)
+                 if (lastslash) {
+                     SV *tempsv;
+                     while ((*lastslash = '\0'), /* Do that, come what may.  */
+-                           (   memBEGINs(libpath, libpath_len, "../")
++                           (   (memBEGINs(libpath, libpath_len, "../")
++#  ifdef WIN32
++                                || memBEGINs(libpath, libpath_len, "..\\")
++#  endif
++                               )
+                             && (lastslash =
+-                                  (char *) my_memrchr(prefix, '/',
+-                                                   SvEND(prefix_sv) - prefix))))
++                                  S_reloc_memrchr(prefix,
++                                                SvEND(prefix_sv) - prefix))))
+                     {
+                         if (lastslash[1] == '\0'
+                             || (lastslash[1] == '.'
+-                                && (lastslash[2] == '/' /* ends "/."  */
+-                                    || (lastslash[2] == '/'
+-                                        && lastslash[3] == '/' /* or "/.."  */
++                                && (RELOC_IS_DIRSEP(lastslash[2]) /* ends "/."  */
++                                    || (RELOC_IS_DIRSEP(lastslash[2])
++                                        && RELOC_IS_DIRSEP(lastslash[3]) /* or "/.."  */
+                                         )))) {
+                             /* Prefix ends "/" or "/." or "/..", any of which
+                                are fishy, so don't do any more logical cleanup.
+@@ -5172,6 +5205,7 @@ S_mayberelocate(pTHX_ const char *const dir, STRLEN len, U32 flags)
+                 }
+                 SvREFCNT_dec(prefix_sv);
+             }
++#  undef RELOC_IS_DIRSEP
+ #endif
+         }
+     return libdir;
+-- 
+2.47.3
+
