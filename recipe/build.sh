@@ -1,15 +1,16 @@
 #!/bin/bash
 
+CPU_COUNT=${CPU_COUNT:=1}
 if [[ "${build_platform}" == "osx-"* && "${target_platform}" == "osx-" && "${build_platform}" != "${target_platform}" ]]; then
   archflags="-arch x86_64 -arch arm64"
   export MACOSX_DEPLOYMENT_TARGET=11.0
 fi
 
-
 if [[ "${target_platform}" == osx-* ]]; then
   if [[ "${target_platform}" == osx-64 ]]; then
     CFLAGS="${CFLAGS} -D_DARWIN_FEATURE_CLOCK_GETTIME=0"
   fi
+  CFLAGS="${CFLAGS} -DHAS_BROKEN_LANGINFO_CODESET"
   ccflags="${CFLAGS} -fno-common -DPERL_DARWIN -no-cpp-precomp -Werror=partial-availability -D_DARWIN_FEATURE_CLOCK_GETTIME=0 -fno-strict-aliasing -pipe -fstack-protector-strong -DPERL_USE_SAFE_PUTENV ${archflags} ${CPPFLAGS}"
 elif [[ "${target_platform}" == linux-* ]]; then
   ccflags="${CFLAGS} -D_REENTRANT -D_GNU_SOURCE -fwrapv -fno-strict-aliasing -pipe -fstack-protector-strong -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2"
@@ -101,12 +102,12 @@ _config_args+=(
 
 _config_args+=(
   "-Dsysman=${PREFIX}/man/man1"
-  "-Dman1dir=.../../man/man1"
-  "-Dman3dir=.../../man/man3"
+  "-Dman1dir="
+  "-Dman3dir="
 )
 
 ./Configure -de "${_config_args[@]}"
-make
+make -j${CPU_COUNT}
 
 # change permissions again after building
 chmod -R o-w "${SRC_DIR}"
@@ -115,13 +116,13 @@ chmod -R o-w "${SRC_DIR}"
 # lib/perlbug .................................................... # Failed test 21 - [perl \#128020] long body lines are wrapped: maxlen 1157 at ../lib/perlbug.t line 154
 # FAILED at test 21
 # https://rt.perl.org/Public/Bug/Display.html?id=128020
-# make test
-make install
+LC_ALL=C LANG=C make test HARNESS_OPTIONS=j${CPU_COUNT}
+make install -j${CPU_COUNT}
 
 # Replace hard-coded BUILD_PREFIX by value from env as CC, CFLAGS etc need to be properly set to be usable by ExtUtils::MakeMaker module
 pushd "${perl_archlib/...\/../${PREFIX}}${perl_core}"
-patch -p1 < "${RECIPE_DIR}/dynamic_config.patch"
-sed -i.bak "s|${BUILD_PREFIX}|\$compilerroot|g" Config_heavy.pl
+patch -p1 < "${RECIPE_DIR}/patches/dynamic_config.patch"
+sed -i.bak "s|${BUILD_PREFIX}|__COMPILER_ROOT__|g" Config_heavy.pl
 
 sed -i.bak "s|${BUILD_PREFIX}|\$compilerroot|g" Config.pm
 sed -i.bak "s|cc => '\(.*\)'|cc => \"\1\"|g" Config.pm
