@@ -1,15 +1,15 @@
-From d70b7b6bbaef0320305877b1cbce93373a3c370c Mon Sep 17 00:00:00 2001
+From 2a46c16947ed757ba42ec1a1f556d184fecdb42b Mon Sep 17 00:00:00 2001
 From: jvolkening <jdv@base2bio.com>
-Date: Thu, 24 Sep 2026 20:04:02 -0500
+Date: Thu, 24 Sep 2026 21:04:45 -0500
 Subject: [PATCH] update setting for conda directory structure
 
 ---
- win32/Makefile  |  11 ++--
+ win32/Makefile  |  12 ++--
  win32/config.vc | 156 ++++++++++++++++++++++++------------------------
- 2 files changed, 83 insertions(+), 84 deletions(-)
+ 2 files changed, 84 insertions(+), 84 deletions(-)
 
 diff --git a/win32/Makefile b/win32/Makefile
-index 42d452e..2f6ce47 100644
+index 42d452e..29e60f1 100644
 --- a/win32/Makefile
 +++ b/win32/Makefile
 @@ -90,7 +90,7 @@ USE_IMP_SYS	= define
@@ -56,7 +56,15 @@ index 42d452e..2f6ce47 100644
  		"INST_ARCH=$(INST_ARCH)"		\
  		"archname=$(ARCHNAME)"			\
  		"cc=$(CC)"				\
-@@ -1305,7 +1306,7 @@ distclean: realclean
+@@ -832,6 +833,7 @@ CFG_VARS	=					\
+ 		"use64bitint=$(USE_64_BIT_INT)"		\
+ 		"uselongdouble=undef"			\
+ 		"usequadmath=undef"			    \
++		"userelocatableinc=define"			    \
+ 		"usesitecustomize=$(USE_SITECUST)"	\
+ 		"default_inc_excludes_dot=$(DEFAULT_INC_EXCLUDES_DOT)"	\
+ 		"LINK_FLAGS=$(LINK_FLAGS:"=\")"		\
+@@ -1305,7 +1307,7 @@ distclean: realclean
  	-if exist $(HTMLDIR) rmdir /s /q $(HTMLDIR)
  	-del /f ..\t\test_state
  
