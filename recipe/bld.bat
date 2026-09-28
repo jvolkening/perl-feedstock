@@ -33,10 +33,6 @@ copy %PREFIX%\bin\perl.exe %PREFIX%\Library\bin
 
 if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
-copy %RECIPE_DIR%\patches\win_reloc_inc.pl %PERL_LIB%
-
-if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
-
 REM Same post-build patching as the *nix script
 REM (not sure yet if this is needed/wanted on Windows or not)
 REM Further: currently disabled because the patch enables interpolation of
@@ -50,17 +46,6 @@ REM  && sed -i "s|cc => '\(.*\)'|cc => \"\1\"|g" Config.pm ^
 REM  && sed -i "s|libpth => '\(.*\)'|libpth => \"\1\"|g" Config.pm
 REM if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 REM popd
-
-REM perl's hard-coded default relative search path is bin/../lib;
-REM Copying these libs to this default location will allow us 
-REM to use perl during post-link before @INC is patched;
-REM then we will remove them during post-link to tidy things up
-copy %ARCH_LIB%\core_perl\Config.pm %PREFIX%\lib
-copy %ARCH_LIB%\core_perl\Config_heavy.pl %PREFIX%\lib
-copy %PERL_LIB%\core_perl\strict.pm %PREFIX%\lib
-copy %PERL_LIB%\core_perl\warnings.pm %PREFIX%\lib
-
-if %ERRORLEVEL% neq 0 exit /b %ERRORLEVEL%
 
 REM Currently this needs to be done *after* install because the
 REM linker paths are set to the installed locations. Possibly there
