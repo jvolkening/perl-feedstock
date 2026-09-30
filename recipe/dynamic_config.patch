@@ -6,8 +6,8 @@
  
 +use File::Basename;
 +my $compilerroot = "";
-+if (length $ENV{'CC'}) {
-+  $compilerroot = dirname($ENV{'CC'})."/../";
++if (length $ENV{'CONDA_PREFIX'}) {
++  $compilerroot = $ENV{'CONDA_PREFIX'}."/";
 +}
 +elsif (length $ENV{'PREFIX'}) {
 +  $compilerroot = $ENV{'PREFIX'}."/";
@@ -32,8 +32,8 @@
  
 +use File::Basename;
 +my $compilerroot = "";
-+if (length $ENV{'CC'}) {
-+  $compilerroot = dirname($ENV{'CC'})."/../";
++if (length $ENV{'CONDA_PREFIX'}) {
++  $compilerroot = $ENV{'CONDA_PREFIX'}."/";
 +}
 +elsif (length $ENV{'PREFIX'}) {
 +  $compilerroot = $ENV{'PREFIX'}."/";
